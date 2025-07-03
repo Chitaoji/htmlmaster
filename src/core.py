@@ -27,7 +27,7 @@ class HTMLTreeMaker(HTMLMaker):
     ulcls : str | None, optional
         \\<ul\\> class name of the current node, by default `licls`.
     maincls : str, optional
-        Main class name, by default "tree".
+        Main class name, by default "main".
     style : str | None, optional
         Css style, by default None.
     level_open : int, optional
@@ -42,7 +42,7 @@ class HTMLTreeMaker(HTMLMaker):
         /,
         licls: str = "m",
         ulcls: str | None = None,
-        maincls: str = "tree",
+        maincls: str = "main",
         style: str | None = None,
         level_open: int = 3,
     ) -> None:
@@ -141,7 +141,7 @@ class HTMLTreeMaker(HTMLMaker):
         """
         maincls = self.get_maincls()
         style = self.getstyle("").format(maincls)
-        return f'{style}\n<ul class="{maincls}">\n{self.make_node(0)}\n</ul>'
+        return f'{style}<ul class="{maincls}">\n{self.make_node(0)}\n</ul>'
 
     def make_node(self, level: int, /) -> str:
         """Make a string representation of the current node."""
@@ -168,6 +168,10 @@ class HTMLTableMaker(HTMLMaker):
         Table index.
     columns : list
         Table columns.
+    maincls : str, optional
+        Main class name, by default "main".
+    style : str | None, optional
+        Css style, by default None.
 
     """
 
@@ -175,7 +179,7 @@ class HTMLTableMaker(HTMLMaker):
         self,
         index: list,
         columns: list,
-        maincls: str = "tree",
+        maincls: str = "main",
         style: str | None = None,
     ):
         super().__init__(maincls, style)
@@ -209,6 +213,6 @@ class HTMLTableMaker(HTMLMaker):
             rows.append("<tr>\n<td>" + row + "</td>\n</tr>\n")
         tbody = "".join(rows)
         return (
-            f'{style}\n<table class="{self.get_maincls()}">\n<thead>\n'
+            f'{style}<table class="{self.get_maincls()}">\n<thead>\n'
             f"<tr>\n{thead}\n</tr>\n</thead>\n<tbody>\n{tbody}</tbody>\n</table>"
         )

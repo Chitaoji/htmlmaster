@@ -14,7 +14,7 @@ __all__ = []
 class HTMLMaker(ABC):
     """Make an html object."""
 
-    def __init__(self, maincls: str = "tree", style: str | None = None) -> None:
+    def __init__(self, maincls: str = "main", style: str | None = None) -> None:
         self.__maincls = maincls
         self.__style = style
 
