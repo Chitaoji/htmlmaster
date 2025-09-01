@@ -16,7 +16,7 @@ This project falls under the BSD 3-Clause License.
 """
 
 from . import core
-from .__version__ import __version__
+from ._version import __version__
 from .core import *
 
 __all__: list[str] = []

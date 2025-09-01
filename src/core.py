@@ -26,10 +26,13 @@ class HTMLTreeMaker(HTMLMaker):
         "main").
     ulcls : str | None, optional
         \\<ul\\> class name of the current node, by default `licls`.
-    maincls : str, optional
-        Main class name, by default "main".
-    style : str | None, optional
-        Css style, by default None.
+    rootcls : str, optional
+        Root class name. Only takes effect on the root node, by default
+        "main".
+    rootstyle : str | None, optional
+        If specified, `rootstyle.format(rootcls)` will be used as the
+        default css style.Only takes effect on the root node, by default
+        None.
     level_open : int, optional
         Specifies how many levels of the tree are defaultly set open, by
         default 3.
@@ -42,14 +45,16 @@ class HTMLTreeMaker(HTMLMaker):
         /,
         licls: str = "m",
         ulcls: str | None = None,
-        maincls: str = "main",
         style: str | None = None,
+        rootcls: str = "main",
+        rootstyle: str | None = None,
         level_open: int = 3,
     ) -> None:
-        super().__init__(maincls, style)
+        super().__init__(rootcls, rootstyle)
         self.__val = value
         self.__licls = licls
         self.__ulcls = licls if ulcls is None else ulcls
+        self.__style = "" if style is None else style
         self.__level_open = level_open
         self.__children: list[Self] = []
 
@@ -117,6 +122,14 @@ class HTMLTreeMaker(HTMLMaker):
         """Get the node class names."""
         return self.__licls, self.__ulcls
 
+    def setstyle(self, style: str, /) -> None:
+        """Set the node style."""
+        self.__style = style
+
+    def getstyle(self) -> str:
+        """Get the node style."""
+        return self.__style
+
     def setlevel(self, level: int, /) -> None:
         """Set the open level."""
         self.__level_open = level
@@ -139,14 +152,15 @@ class HTMLTreeMaker(HTMLMaker):
             String representation.
 
         """
-        maincls = self.get_maincls()
-        style = self.getstyle("").format(maincls)
-        return f'{style}<ul class="{maincls}">\n{self.make_node(0)}\n</ul>'
+        rootcls = self.getrootcls()
+        style = self.getrootstyle("").format(rootcls)
+        return f'{style}<ul class="{rootcls}">\n{self.make_node(0)}\n</ul>'
 
     def make_node(self, level: int, /) -> str:
         """Make a string representation of the current node."""
         if not self.__children:
-            return f'<li class="{self.__licls}"><span>{self.__val}</span></li>'
+            style = f' style="{self.__style}"' if self.__style else ""
+            return f'<li class="{self.__licls}"><span {style}>{self.__val}</span></li>'
         children_str = "\n".join(x.make_node(level + 1) for x in self.__children)
         if self.__val is None:
             return children_str
@@ -168,10 +182,13 @@ class HTMLTableMaker(HTMLMaker):
         Table index.
     columns : list
         Table columns.
-    maincls : str, optional
-        Main class name, by default "main".
-    style : str | None, optional
-        Css style, by default None.
+    rootcls : str, optional
+        Root class name. Only takes effect on the root node, by default
+        "main".
+    rootstyle : str | None, optional
+        If specified, `rootstyle.format(rootcls)` will be used as the
+        default css style.Only takes effect on the root node, by default
+        None.
 
     """
 
@@ -179,10 +196,10 @@ class HTMLTableMaker(HTMLMaker):
         self,
         index: list,
         columns: list,
-        maincls: str = "main",
-        style: str | None = None,
+        rootcls: str = "main",
+        rootstyle: str | None = None,
     ):
-        super().__init__(maincls, style)
+        super().__init__(rootcls, rootstyle)
         self.__index = index
         self.__columns = columns
         self.__data = [
@@ -205,7 +222,7 @@ class HTMLTableMaker(HTMLMaker):
             String representation.
 
         """
-        style = self.getstyle("").format(self.get_maincls())
+        style = self.getrootstyle("").format(self.getrootcls())
         thead = "\n".join(f"<th>{x}</th>" for x in self.__columns)
         rows = []
         for x in self.__data:
@@ -213,6 +230,6 @@ class HTMLTableMaker(HTMLMaker):
             rows.append("<tr>\n<td>" + row + "</td>\n</tr>\n")
         tbody = "".join(rows)
         return (
-            f'{style}<table class="{self.get_maincls()}">\n<thead>\n'
+            f'{style}<table class="{self.getrootcls()}">\n<thead>\n'
             f"<tr>\n{thead}\n</tr>\n</thead>\n<tbody>\n{tbody}</tbody>\n</table>"
         )

@@ -89,5 +89,9 @@ If you are using a jupyter notebook, you can run a cell like this:
 This project falls under the BSD 3-Clause License.
 
 ## History
+### v0.0.2
+* New methods for `HTMLMaker`: `*.setrootstyle()`, `*.getrootstyle()`, `*.setrootcls()`, `*.getrootcls()`.
+* Removed methods from `HTMLMaker`: `*.set_maincls()`, `*.get_maincls()`.
+
 ### v0.0.1
 * Initial release.
