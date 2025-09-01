@@ -89,6 +89,9 @@ If you are using a jupyter notebook, you can run a cell like this:
 This project falls under the BSD 3-Clause License.
 
 ## History
+### v0.0.4
+* Fixed a bug occured when specifying `value=None` for `HTMLTreeMaker()`.
+
 ### v0.0.3
 * New method for `HTMLTreeMaker`: `*.addspan()`, `*.addval()`.
 * Removed methods from `HTMLTreeMaker`: `*.setstyle()`, `*.getstyle()`

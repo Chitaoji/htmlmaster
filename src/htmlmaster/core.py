@@ -99,12 +99,16 @@ class HTMLTreeMaker(HTMLMaker):
         self, value: str | Self, /, spancls: str | None = None, style: str | None = None
     ) -> None:
         """Add a span."""
+        if self.__val is None:
+            self.__val = ""
         spancls = f' class="{spancls}"' if style else ""
         style = f' style="{style}"' if style else ""
         self.__val += f"<span{spancls}{style}>{value}</span>"
 
     def addval(self, value: str | Self, /) -> None:
         """Add a value in node."""
+        if self.__val is None:
+            self.__val = ""
         self.__val += value
 
     def discard(self, index: int, /) -> None:
