@@ -14,25 +14,25 @@ __all__ = []
 class HTMLMaker(ABC):
     """Make an html object."""
 
-    def __init__(self, maincls: str = "main", style: str | None = None) -> None:
-        self.__maincls = maincls
-        self.__style = style
+    def __init__(self, rootcls: str = "main", style: str | None = None) -> None:
+        self.__rootcls = rootcls
+        self.__rootstyle = style
 
-    def set_maincls(self, maincls: str, /) -> None:
-        """Set the main class name."""
-        self.__maincls = maincls
+    def setrootcls(self, rootcls: str, /) -> None:
+        """Set class name for the root node."""
+        self.__rootcls = rootcls
 
-    def get_maincls(self) -> str | None:
-        """Get the main class name."""
-        return self.__maincls
+    def getrootcls(self) -> str | None:
+        """Get class name for the root node."""
+        return self.__rootcls
 
-    def setstyle(self, style: str | None, /) -> None:
-        """Set the default css style."""
-        self.__style = style
+    def setrootstyle(self, style: str | None, /) -> None:
+        """Set default css style for the root node."""
+        self.__rootstyle = style
 
-    def getstyle(self, default: str = "") -> str:
-        """Get the default css style."""
-        return default if self.__style is None else self.__style
+    def getrootstyle(self, default: str = "") -> str:
+        """Get default css style for the root node."""
+        return default if self.__rootstyle is None else self.__rootstyle
 
     @abstractmethod
     def make(self) -> str:
