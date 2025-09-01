@@ -45,7 +45,6 @@ class HTMLTreeMaker(HTMLMaker):
         /,
         licls: str = "m",
         ulcls: str | None = None,
-        style: str | None = None,
         rootcls: str = "main",
         rootstyle: str | None = None,
         level_open: int = 3,
@@ -54,7 +53,6 @@ class HTMLTreeMaker(HTMLMaker):
         self.__val = value
         self.__licls = licls
         self.__ulcls = licls if ulcls is None else ulcls
-        self.__style = "" if style is None else style
         self.__level_open = level_open
         self.__children: list[Self] = []
 
@@ -97,6 +95,18 @@ class HTMLTreeMaker(HTMLMaker):
                 value.setcls(licls, ulcls)
             self.__children.append(value)
 
+    def addspan(
+        self, value: str | Self, /, spancls: str | None = None, style: str | None = None
+    ) -> None:
+        """Add a span."""
+        spancls = f' class="{spancls}"' if style else ""
+        style = f' style="{style}"' if style else ""
+        self.__val += f"<span{spancls}{style}>{value}</span>"
+
+    def addval(self, value: str | Self, /) -> None:
+        """Add a value in node."""
+        self.__val += value
+
     def discard(self, index: int, /) -> None:
         """Discard the n-th child node."""
         self.__children = self.__children[:index] + self.__children[index:]
@@ -121,14 +131,6 @@ class HTMLTreeMaker(HTMLMaker):
     def getcls(self) -> tuple[str, str]:
         """Get the node class names."""
         return self.__licls, self.__ulcls
-
-    def setstyle(self, style: str, /) -> None:
-        """Set the node style."""
-        self.__style = style
-
-    def getstyle(self) -> str:
-        """Get the node style."""
-        return self.__style
 
     def setlevel(self, level: int, /) -> None:
         """Set the open level."""
@@ -159,8 +161,7 @@ class HTMLTreeMaker(HTMLMaker):
     def make_node(self, level: int, /) -> str:
         """Make a string representation of the current node."""
         if not self.__children:
-            style = f' style="{self.__style}"' if self.__style else ""
-            return f'<li class="{self.__licls}"><span {style}>{self.__val}</span></li>'
+            return f'<li class="{self.__licls}">{self.__val}</li>'
         children_str = "\n".join(x.make_node(level + 1) for x in self.__children)
         if self.__val is None:
             return children_str
