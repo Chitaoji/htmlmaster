@@ -101,7 +101,7 @@ class HTMLTreeMaker(HTMLMaker):
         """Add a span."""
         if self.__val is None:
             self.__val = ""
-        spancls = f' class="{spancls}"' if style else ""
+        spancls = f' class="{spancls}"' if spancls else ""
         style = f' style="{style}"' if style else ""
         self.__val += f"<span{spancls}{style}>{value}</span>"
 
